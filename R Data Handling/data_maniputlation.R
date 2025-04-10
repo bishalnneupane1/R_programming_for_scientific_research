@@ -67,3 +67,76 @@ df %>%
 # reshaping
 library(furniture)
 
+#create a wide data frame
+df_wide <- data.frame('ID'=c('a', 'b', 'c', 'd'),
+                      'time1'=c(1:4),
+                      'time2'=c(3,5,6,9)) # create wide data frame
+
+df_wide
+#  ID time1 time2
+#1  a     1     3
+#2  b     2     5
+#3  c     3     6
+#4  d     4     9
+
+#convert wide to long
+df_long<-long(df_wide,
+              c('time1', 'time2'),
+              v.names='value')
+df_long
+#    ID time value
+#a.1  a    1     1
+#b.1  b    1     2
+#c.1  c    1     3
+#d.1  d    1     4
+#a.2  a    2     3
+#b.2  b    2     5
+#c.2  c    2     6
+#d.2  d    2     9
+
+# convert long to wide
+df_wide<-wide(df_long,
+              v.names=c('value'),
+              timevar='time') # convert long to wide data frame
+
+df_wide
+#    ID value.1 value.2
+#a.1  a       1       3
+#b.1  b       2       5
+#c.1  c       3       6
+#d.1  d       4       9
+
+### joining(mergining)
+df1 <- data.frame(ID=1:3,
+                  x1=c('a1', 'a2', 'a3'),
+                  stringsAsFactors = F)
+
+df2<- data.frame(ID=2:4,
+                 x2 = c('z1', 'z2', 'z3'),
+                 stringsAsFactors = F)
+df3<- data.frame(ID=3:5,
+                 x2=c('a1', 'a2', 'a3'),
+                 x3=c('z1', 'z2', 'z3'),
+                 stringsAsFactors = F)
+
+### inner_join() merges the variable of both data frames,
+### but retains only rows with a shared ID
+inner_join(df1, df2, by='ID')
+
+#left_join
+left_join(df1, df2, by='ID')
+
+#right_join
+right_join(df1, df2, by='ID')
+
+full_join(df1, df2, by='ID') #retains the most data of all the join functions.
+semi_join(df1, df2, by='ID') #return all rows from x where there are matching values in y, keeping just columns from x
+anti_join(df1, df2, by='ID')#return all rows from x where there are not matching values in y, keeping just columns from x.
+
+#join_multiple_data_frames
+full_join(df1, df2, by='ID') %>%
+  full_join(.,df3, by='ID') 
+
+# join by multiple columns:
+full_join(df2, df3, by=c('ID', 'x2'))
+
