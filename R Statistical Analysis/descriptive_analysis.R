@@ -47,3 +47,30 @@ mean(d$crime+1.96*sd(d$crime)/sqrt(200))
 
 mean(d$crime)-1.96*sd(d$crime)/sqrt(200)
 
+
+
+### for table() function
+table(d$evi)
+table(d$evi > 0.3)
+
+tb1 <- table(d$evi)
+addmargins(tb1)
+prop.table(tb1)
+table(d$crime > 290, d$open > 1.5)
+
+
+# for chi-square test
+chisq.test(dt)
+
+#decribe function
+#using describe from psych package
+psych::describe(dt)
+
+# using decribe from hmisc package
+Hmisc::describe(dt)
+
+
+# using tapply() function for calculating descriptive function
+tapply(d$crime, d$open, mean)
+
+tapply(d$crime, list(d$open, d$evi < 0.3), mean, na.rm=T)
